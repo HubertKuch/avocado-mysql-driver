@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4347ef050cf6ec5e70de8a56315c3d54",
+    "content-hash": "bedbb7cbacd73b00b67e0b0d020f9238",
     "packages": [
         {
             "name": "hubert/avocado",
@@ -343,7 +343,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "hubert/avocado": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

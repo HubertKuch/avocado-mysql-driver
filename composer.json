@@ -2,8 +2,9 @@
     "name": "hubert/avocado-mysql-driver",
     "type": "library",
     "require": {
-        "hubert/avocado": ">=v7.0.0",
-        "ext-pdo": "*"
+        "hubert/avocado": "dev-main",
+        "ext-pdo": "*",
+        "php": "8.*"
     },
     "autoload": {
         "classmap": ["src"],
