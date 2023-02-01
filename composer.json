@@ -1,0 +1,22 @@
+{
+    "name": "hubert/avocado-mysql-driver",
+    "type": "library",
+    "require": {
+        "hubert/avocado": ">=v7.0.0",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "classmap": ["src"],
+        "psr-4": {
+            "Hubert\\MysqlDriver\\": "src/"
+        }
+    },
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "HubertKuch",
+            "email": "kuchhubert@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}
