@@ -2,8 +2,7 @@
 
 namespace Avocado\MysqlDriver;
 
-namespace Avocado\DataSource\Database\Statement;
-
+use Avocado\DataSource\Database\Statement\Statement;
 use PDO;
 
 class MySQLStatement implements Statement {

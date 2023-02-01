@@ -3,7 +3,6 @@
 namespace Avocado\MysqlDriver;
 
 use Avocado\DataSource\Drivers\Connection\Connection;
-use Avocado\DataSource\Drivers\Connection\MySQLConnection;
 use Avocado\DataSource\Drivers\Driver;
 use PDO;
 

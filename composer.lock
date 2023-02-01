@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bedbb7cbacd73b00b67e0b0d020f9238",
+    "content-hash": "bc0243614f279adc73e6fce41d6f0246",
     "packages": [
         {
             "name": "hubert/avocado",
@@ -349,7 +349,8 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "ext-pdo": "*"
+        "ext-pdo": "*",
+        "php": "8.*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"

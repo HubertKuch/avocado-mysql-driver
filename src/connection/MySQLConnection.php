@@ -3,10 +3,7 @@
 namespace Avocado\MysqlDriver;
 
 use Avocado\AvocadoORM\Mappers\Mapper;
-use Avocado\AvocadoORM\Mappers\MySQLMapper;
-use Avocado\DataSource\Builder\MySQLQueryBuilder;
 use Avocado\DataSource\Builder\SQLBuilder;
-use Avocado\DataSource\Database\Statement\MySQLStatement;
 use Avocado\DataSource\Database\Statement\Statement;
 use Avocado\DataSource\Drivers\Connection\Connection;
 use PDO;
