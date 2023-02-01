@@ -26,7 +26,7 @@ class MySQLQueryBuilder implements SQLBuilder {
             $base .= " WHERE ".self::buildCriteria($criteria);
         }
 
-        return new \Avocado\DataSource\Builder\MySQLQueryBuilder($base);
+        return new MySQLQueryBuilder($base);
     }
 
     public static function update(string $tableName, array $updateCriteria, array $findCriteria = []): Builder {
