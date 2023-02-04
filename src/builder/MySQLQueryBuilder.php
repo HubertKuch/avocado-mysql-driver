@@ -90,7 +90,10 @@ class MySQLQueryBuilder implements SQLBuilder {
 
             if ($valueType === "integer" || $valueType === "double" || $valueType === "boolean") $sql.=" $key = $value, ";
             else if ($valueType == "NULL") $sql .= " $key = null ";
-            else if ($valueType === "string") $sql.= " $key = \"$value\" , ";
+            else if ($valueType === "string") {
+                $value = str_replace("'", "\\'", $value);
+                $sql.= " $key = '$value' , ";
+            }
         }
 
         return substr($sql, 0, -2);
