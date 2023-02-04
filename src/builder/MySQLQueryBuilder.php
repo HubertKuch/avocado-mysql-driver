@@ -33,7 +33,7 @@ class MySQLQueryBuilder implements SQLBuilder {
         $base = "UPDATE $tableName SET ";
 
         $base .= self::buildUpdateCriteria($updateCriteria);
-        $base .= self::buildCriteria($findCriteria);
+        $base .= empty($findCriteria) ? "" : " WHERE " . self::buildCriteria($findCriteria);
 
         return new MySQLQueryBuilder($base);
     }
