@@ -1,7 +1,7 @@
 # MySQL driver for Avocado
 Driver based on PDO. Will works with MySQL and MariaDB.
 
-## Used example
+## Use example
 
 ```php
 #[Configuration]
