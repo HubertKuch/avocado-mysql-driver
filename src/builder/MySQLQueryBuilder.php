@@ -115,7 +115,7 @@ class MySQLQueryBuilder implements SQLBuilder {
                 $prev .= ", NULL";
             } else if (is_string($val) == "string") {
                 $val = str_replace("'", "\\'", $val);
-                $prev .= " , \'$val\'";
+                $prev .= " , '$val'";
             } else {
                 $prev .= " , $val";
             }
