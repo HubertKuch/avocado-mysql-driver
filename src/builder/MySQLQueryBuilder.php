@@ -2,6 +2,7 @@
 
 namespace Avocado\MysqlDriver;
 
+use Avocado\AvocadoORM\Attributes\JoinDirection;
 use Avocado\AvocadoORM\Order;
 use Avocado\DataSource\Builder\Builder;
 use Avocado\DataSource\Builder\SQLBuilder;
@@ -10,23 +11,34 @@ use Avocado\Utils\ReflectionUtils;
 class MySQLQueryBuilder implements SQLBuilder {
 
     private string $sql;
+    private string $tableName;
 
-    public function __construct(string $sql = "") {
+    public function __construct(string $sql = "", string $tableName = "") {
         $this->sql = $sql;
+        $this->tableName = $tableName;
     }
 
     public function get(): string {
         return $this->sql;
     }
 
-    public static function find(string $tableName, array $criteria, ?array $special = []): Builder {
+    public static function find(string $tableName, array $criteria = [], ?array $special = []): Builder {
         $base = "SELECT * FROM $tableName";
 
         if (!empty($criteria)) {
             $base .= " WHERE ".self::buildCriteria($criteria);
         }
 
-        return new MySQLQueryBuilder($base);
+        return new MySQLQueryBuilder($base, $tableName);
+    }
+
+    public function join(string $table, string $columnName, string $referencedColumnName, JoinDirection $joinDirection = JoinDirection::LEFT): Builder {
+        $joinAlias = $table;
+        $base = " {$joinDirection->value} JOIN $table {$joinAlias} ON {$this->tableName}.{$columnName} = {$joinAlias}.{$referencedColumnName} ";
+
+        $this->sql .= $base;
+
+        return $this;
     }
 
     public static function update(string $tableName, array $updateCriteria, array $findCriteria = []): Builder {
@@ -35,7 +47,7 @@ class MySQLQueryBuilder implements SQLBuilder {
         $base .= self::buildUpdateCriteria($updateCriteria);
         $base .= empty($findCriteria) ? "" : " WHERE " . self::buildCriteria($findCriteria);
 
-        return new MySQLQueryBuilder($base);
+        return new MySQLQueryBuilder($base, $tableName);
     }
 
     public static function delete(string $tableName, array $criteria): Builder {
@@ -45,7 +57,7 @@ class MySQLQueryBuilder implements SQLBuilder {
             $base .= " WHERE ".self::buildCriteria($criteria);
         }
 
-        return new MySQLQueryBuilder($base);
+        return new MySQLQueryBuilder($base, $tableName);
     }
 
     public static function save(string $tableName, object $object): Builder {
@@ -56,7 +68,7 @@ class MySQLQueryBuilder implements SQLBuilder {
 
         $base = "INSERT INTO $tableName ($insertColumns) VALUE ($saveValues)";
 
-        return new MySQLQueryBuilder($base);
+        return new MySQLQueryBuilder($base, $tableName);
     }
 
     private static function buildCriteria(array $criteria): string {
@@ -138,8 +150,12 @@ class MySQLQueryBuilder implements SQLBuilder {
         return $this;
     }
 
-    public function orderBy(string $field, Order $order): Builder {
-        $this->sql .= " ORDER BY $field {$order->value}";
+    public function orderBy(string $field, Order $order = Order::ASCENDING): Builder {
+        if (str_contains($this->sql, "ORDER BY")) {
+            $this->sql .= ", $field {$order->value}";
+        } else {
+            $this->sql .= " ORDER BY $field {$order->value}";
+        }
 
         return $this;
     }
