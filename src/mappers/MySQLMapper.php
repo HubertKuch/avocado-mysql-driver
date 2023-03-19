@@ -2,11 +2,14 @@
 
 namespace Avocado\MysqlDriver;
 
+use Avocado\AvocadoORM\Attributes\Relations\JoinColumn;
+use Avocado\AvocadoORM\Attributes\Relations\OneToMany;
 use Avocado\AvocadoORM\Mappers\Mapper;
 use Avocado\ORM\Attributes\Field;
 use Avocado\ORM\Attributes\Id;
 use Avocado\ORM\AvocadoModel;
 use Avocado\ORM\AvocadoModelException;
+use Avocado\Utils\AnnotationUtils;
 use Avocado\Utils\Arrays;
 use ReflectionClass;
 use ReflectionEnum;
@@ -27,20 +30,15 @@ class MySQLMapper implements Mapper {
         $modelReflection = new ReflectionClass($model->getModel());
         $modelProperties = $modelReflection->getProperties();
 
-        $entityReflection = new ReflectionObject($entity);
-
         $instance = $modelReflection->newInstanceWithoutConstructor();
         $instanceReflection = new ReflectionObject($instance);
 
         foreach ($modelProperties as $modelProperty) {
-
             $field = $modelProperty->getAttributes(Field::class)[0] ?? null;
             $primaryKey = $modelProperty->getAttributes(Id::class)[0] ?? null;
             $modelPropertyName = $modelProperty->getName();
             $entityPropertyName = $this->getEntityPropertyName($modelProperty, $field, $primaryKey);
-
-            $entityPropertyValue = $entityReflection->getProperty($entityPropertyName)->getValue($entity);
-
+            $entityPropertyValue = $entity->{$entityPropertyName};
             $instanceProperty = $instanceReflection->getProperty($modelPropertyName);
 
             if ($model->isPropertyIsEnum($modelPropertyName)) {
