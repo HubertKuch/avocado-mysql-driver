@@ -38,7 +38,12 @@ class MySQLMapper implements Mapper {
             $primaryKey = $modelProperty->getAttributes(Id::class)[0] ?? null;
             $modelPropertyName = $modelProperty->getName();
             $entityPropertyName = $this->getEntityPropertyName($modelProperty, $field, $primaryKey);
-            $entityPropertyValue = $entity->{$entityPropertyName};
+            $entityPropertyValue = $entity->{$entityPropertyName} ?? null;
+
+            if ($entityPropertyValue === null) {
+                continue;
+            }
+
             $instanceProperty = $instanceReflection->getProperty($modelPropertyName);
 
             if ($model->isPropertyIsEnum($modelPropertyName)) {
