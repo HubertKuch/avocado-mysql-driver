@@ -7,6 +7,7 @@ use Avocado\AvocadoORM\Order;
 use Avocado\DataSource\Builder\Builder;
 use Avocado\DataSource\Builder\SQLBuilder;
 use Avocado\Utils\ReflectionUtils;
+use Avocado\Utils\TypesUtils;
 
 class MySQLQueryBuilder implements SQLBuilder {
 
@@ -62,6 +63,11 @@ class MySQLQueryBuilder implements SQLBuilder {
 
     public static function save(string $tableName, object $object): Builder {
         $fields = ReflectionUtils::modelFieldsToArray($object);
+        $fields = array_filter($fields, function ($val, $key) {
+            $type = gettype($val);
+
+            return TypesUtils::stringContainsPrimitiveType($type) || enum_exists($type);
+        }, ARRAY_FILTER_USE_BOTH);
 
         $insertColumns = self::fieldsArrayToColumnString($fields);
         $saveValues = self::fieldsToSaveString($fields);
@@ -112,14 +118,16 @@ class MySQLQueryBuilder implements SQLBuilder {
     }
 
     private static function fieldsArrayToColumnString(array $arr): string {
-        return ltrim(array_reduce(array_keys($arr), fn ($prev, $key) => $prev . ", $key"), ", \s\t\n\r\0\x0B");
+        return ltrim(array_reduce(array_keys($arr), function ($prev, $key) use ($arr) {
+            return $prev . ", $key";
+        }), ", \s\t\n\r\0\x0B");
     }
 
     private static function fieldsToSaveString(array $arr): string {
         $subject = array_reduce(array_keys($arr), function ($prev, $key) use ($arr) {
             $val = $arr[$key];
 
-            if (is_object($val)) {
+            if (enum_exists(gettype($val))) {
                 $val = $val->value;
             }
 
@@ -128,7 +136,7 @@ class MySQLQueryBuilder implements SQLBuilder {
             } else if (is_string($val) == "string") {
                 $val = str_replace("'", "\\'", $val);
                 $prev .= " , '$val'";
-            } else {
+            } else if (!is_object($val)) {
                 $prev .= " , $val";
             }
 
