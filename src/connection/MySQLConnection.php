@@ -6,6 +6,8 @@ use Avocado\AvocadoORM\Mappers\Mapper;
 use Avocado\DataSource\Builder\SQLBuilder;
 use Avocado\DataSource\Database\Statement\Statement;
 use Avocado\DataSource\Drivers\Connection\Connection;
+use Avocado\DataSource\Transactions\TransactionManager;
+use Hubert\MysqlDriver\transactions\MySqlTransactionsManager;
 use PDO;
 
 class MySQLConnection implements Connection {
@@ -31,5 +33,9 @@ class MySQLConnection implements Connection {
 
     public function mapper(): MySQLMapper {
         return $this->mapper;
+    }
+
+    public function transactionManager(): TransactionManager {
+        return new MySqlTransactionsManager($this->pdo);
     }
 }
