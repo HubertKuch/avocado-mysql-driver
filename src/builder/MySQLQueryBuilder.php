@@ -62,7 +62,7 @@ class MySQLQueryBuilder implements SQLBuilder {
     }
 
     public static function save(string $tableName, object $object): Builder {
-        $fields = ReflectionUtils::modelFieldsToArray($object);
+        $fields = ReflectionUtils::modelFieldsToArray($object, true);
         $fields = array_filter($fields, function ($val, $key) {
             $type = gettype($val);
 
